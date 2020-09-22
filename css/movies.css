@@ -1,0 +1,15 @@
+
+
+:root {
+    --darkBlue: #121CB4;
+    --purple: #706193;
+    --softPurple: #f8ebff;
+    --seaFoam: #67BAA7;
+}
+
+*{
+    /*color: var(--softPurple);*/
+}
+body {
+    background-color: var(--purple);
+}

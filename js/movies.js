@@ -57,27 +57,36 @@ function generateHTML(data) {
     let $ratings = $("#ratings");
     let $deletions = $("#delete");
 
+
     for (let obj of data) {
+        let $movieCard = $(document.createElement("div"))
+            .addClass("card")
+        let $cardHeader = $(document.createElement("div"))
+            .addClass("card-header row")
         let $title = $(document.createElement("div")).append(obj.title)
+            .addClass("col-6")
             .click(function (){
                 $("#titleEdit").val(obj.title);
                 $("#ratingEdit").val(obj.rating)
                 $("#submitEdit").attr("currentEdit", obj.id)
             });
 
-        let $rating = $(document.createElement("div")).append(obj.rating);
+        let $rating = $(document.createElement("div")).append(obj.rating)
+            .addClass("col-6")
+        $cardHeader.append($title, $rating)
+        $movieCard.append($cardHeader)
         let $delete = $(document.createElement("div"))
             .append("delete")
             .click(function () {
                 deleteItem(obj.id);
             })
-
-        $titles.append($title);
-        $ratings.append($rating);
-        $deletions.append($delete);
+        $("#movieTable").append($movieCard)
+        // $titles.append($title);
+        // $ratings.append($rating);
+        // $deletions.append($delete);
 
     }
-    $("#movieTable").append($titles).append($ratings).append($deletions);
+    // $("#movieTable").append($titles).append($ratings).append($deletions);
 }
 $("#editMovie").submit(event => {
     event.preventDefault();
