@@ -1,7 +1,5 @@
 //TODO: single-page application
 // loading animation
-// edit listings
-// delete movies
 // disable while promise is fulfilling
 // modals for forms
 // add a genre property
@@ -60,12 +58,18 @@ function generateHTML(data) {
     let $deletions = $("#delete");
 
     for (let obj of data) {
-        let $title = $(document.createElement("div")).append(obj.title);
+        let $title = $(document.createElement("div")).append(obj.title)
+            .click(function (){
+                $("#titleEdit").val(obj.title);
+                $("#ratingEdit").val(obj.rating)
+                $("#submitEdit").attr("currentEdit", obj.id)
+            });
+
         let $rating = $(document.createElement("div")).append(obj.rating);
         let $delete = $(document.createElement("div"))
             .append("delete")
-            .click(function() {
-                deleteItem(data, obj.id);
+            .click(function () {
+                deleteItem(obj.id);
             })
 
         $titles.append($title);
@@ -75,12 +79,43 @@ function generateHTML(data) {
     }
     $("#movieTable").append($titles).append($ratings).append($deletions);
 }
-function deleteItem(data, id) {
-    for (let obj of data) {
-        if (obj.id === id) {
-            //delete
-        }
+$("#editMovie").submit(event => {
+    event.preventDefault();
+
+    let title = $("#titleEdit").val();
+    let rating = $("#ratingEdit").val();
+
+    const movieObj = {
+        title: title,
+        rating: rating,
+    };
+    const url = 'https://platinum-satisfying-caption.glitch.me/movies/' + $("#submitEdit").attr("currentEdit");
+    const options = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movieObj),
+    };
+    fetch(url, options)
+        .then(response => console.log(response))
+        .then(() => loadHTML())
+        .catch(error => console.error(error));
+});
+
+
+function deleteItem(id) {
+    const url = "https://platinum-satisfying-caption.glitch.me/movies/" + id;
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     }
+    fetch(url, options)
+        .then(response => console.log(response))
+        .then(()=>loadHTML())
+        .catch (error => console.error(error));
 }
 
 // fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=summer`)
