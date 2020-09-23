@@ -38,78 +38,101 @@ $("#searchMovie").submit(function (e) {
     fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=1`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            let arr = data.Search;
-            for (let obj of arr) {
-                $("#searchResults").prepend($(document.createElement("div")).text(obj.Title));
-            }
+
+            populateSearchResults(data);
+
             let totalPages = Math.ceil(parseInt(data.totalResults) / 10);
-            console.log(totalPages);
-            let searchPage = $("#searchPage");
-            searchPage.html(`<li class="page-item">
-                <a class="page-link" id="previous" href="#" aria-label="Previous">
+            populatePageNav(totalPages);
+
+            $("#previous").click(function (e) {
+                e.preventDefault();
+                previousPage();
+            });
+
+            $("#next").click(function (e) {
+                e.preventDefault();
+                nextPage();
+            });
+
+            $(".pageNumber").click(function (e) {
+                e.preventDefault();
+                turnPageTo($(this).parent());
+            });
+        });
+});
+
+function populateSearchResults(data) {
+    let arr = data.Search;
+    let $results = $("#searchResults");
+    $results.empty();
+
+    for (let obj of arr) {
+        $results.append($(document.createElement("div")).text(obj.Title));
+    }
+}
+
+function populatePageNav(totalPages) {
+    let searchPage = $("#searchPage");
+
+    searchPage.html(
+        `<li class="page-item">
+            <a class="page-link" id="previous" href="#" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
-                </a>
-                </li>`)
-            let i = 1;
-            while (i <= 10 && i <= totalPages) {
-                searchPage.append(`<li class="page-item"><a class="page-link pageNumber" href="#">${i}</a></li>`);
-                i++;
-            }
-            searchPage.append(`<li class="page-item">
+            </a>
+        </li>`);
+
+    let i = 1;
+    while (i <= 10 && i <= totalPages) {
+        searchPage.append(`<li class="page-item"><a class="page-link pageNumber" href="#">${i}</a></li>`);
+        i++;
+    }
+    searchPage.append(`<li class="page-item">
                 <a class="page-link" id="next" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
                 </a>
-            </li>`)
-            searchPage.find("li:nth-of-type(2)").addClass("active");
+            </li>`);
+    searchPage.find("li:nth-of-type(2)").addClass("active");
+}
 
+function previousPage() {
+    const $active = $(".active");
+    const currentPage = $active.text();
+    const page = (parseInt(currentPage) - 1);
 
-            $("#previous").click(function(e) {
-                e.preventDefault();
-                let currentPage = $(".active").text();
-                let page = parseInt(currentPage) - 1;
+    if (page >= 1) {
+        turnPageTo($active.prev());
+    }
+}
 
-                if (page > 0) {
-                    let searchStr = $("#addSearch").val();
-                    let $prev = $(".active").prev();
+function nextPage() {
+    const $active = $(".active");
+    const currentPage = $active.text();
+    const page = parseInt(currentPage) + 1;
 
-                    $(".active").removeClass("active");
-                    $prev.addClass("active");
-                    fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=${page}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let arr = data.Search;
-                            $("#searchResults").empty();
-                            for (let obj of arr) {
-                                $("#searchResults").append($(document.createElement("div")).text(obj.Title));
-                            }
-                        })
-                }
-            })
+    if (page <= 10) {
+        turnPageTo($active.next());
+    }
+}
 
+function turnPageTo($pageClicked) {
+    const page = $pageClicked.text();
+    const searchStr = $("#addSearch").val();
 
+    $(".active").removeClass("active");
+    $pageClicked.addClass("active");
 
-            $(".pageNumber").click(function(e) {
-                e.preventDefault();
-                let searchStr = $("#addSearch").val();
-                $(".active").removeClass("active");
-                let page = $(this).text();
-                $(this).parent().addClass("active");
-                console.log($(this).text());
-                fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=${page}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let arr = data.Search;
-                        $("#searchResults").empty();
-                        for (let obj of arr) {
-                            $("#searchResults").append($(document.createElement("div")).text(obj.Title));
-                        }
-                    })
-            })
+    getData(searchStr, page);
+}
+
+function getData(searchStr, page = 1) {
+    fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=${page}`)
+        .then(response => response.json())
+        .then(data => {
+            populateSearchResults(data);
         });
-});
+}
 
 `<li class="page-item">
     <a class="page-link" href="#" aria-label="Previous">

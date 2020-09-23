@@ -38,27 +38,34 @@ function createMovieCard(obj) {
 
     $movieCard.find(".card-header").attr("id", `movie${obj.id}`);
     $movieCard.find(".movieTitle").text(obj.title);
-    $movieCard.find(".movieRating").html(`<i class="far fa-meh-rolling-eyes rating1"></i>
-    <i class="far fa-frown rating2"></i>
-    <i class="far fa-meh rating3"></i>
-    <i class="far fa-smile rating4"></i>`);
-    $movieCard.find("i").hover(function (){
-        $(this).removeClass("far").addClass("fas")
-    },
-        function (){
-        let rating = "rating" + obj.rating
-            if (!$(this).hasClass(rating)){
-            $(this).removeClass("fas").addClass("far")
+    $movieCard.find(".movieRating").html(
+        `<i class="far fa-meh-rolling-eyes rating1"></i>
+        <i class="far fa-frown rating2"></i>
+        <i class="far fa-meh rating3"></i>
+        <i class="far fa-smile rating4"></i>`);
+
+    $movieCard.find("i").hover(
+        function () {
+            $(this).removeClass("far").addClass("fas")
+        },
+        function () {
+            let rating = "rating" + obj.rating
+            if (!$(this).hasClass(rating)) {
+                $(this).removeClass("fas").addClass("far")
             }
-        }).click(function (e){
+        });
+
+    $movieCard.click(function (e) {
         e.stopPropagation();
-        console.log($(this).attr("class"))
-        let classes = $(this).attr("class")
-        let rating = classes[classes.indexOf("rating") + 6]
-        let movieObj = {rating:parseInt(rating)}
+
+        const classes = $(this).attr("class");
+        const rating = classes[classes.indexOf("rating") + 6];
+        const movieObj = {rating: parseInt(rating)};
         const url = `${baseURL + obj.id}`;
-        modifyData("PATCH", url, movieObj)
-    })
+
+        modifyData("PATCH", url, movieObj);
+    });
+
     $movieCard.find(".rating" + obj.rating).removeClass("far").addClass("fas")
     $movieCard.find(".headerBtn").attr({
         "data-target": `#collapse${obj.id}`,
@@ -81,11 +88,11 @@ function deleteItem(id) {
 
 function modifyData(method, url, obj) {
 
-    const options = {
+    let options = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
-        },
+        }
     }
 
     if (obj) {
@@ -93,7 +100,6 @@ function modifyData(method, url, obj) {
     }
 
     fetch(url, options)
-        .then(response => console.log(response))
         .then(loadHTML)
         .catch(error => console.error(error));
 }
