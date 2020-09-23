@@ -7,6 +7,8 @@ $("#addMovie").submit(event => {
     };
 
     modifyData("POST", baseURL, movieObj);
+
+    $("#addMovie").addClass("d-none")
 });
 
 $("#editMovie").submit(event => {
@@ -21,3 +23,9 @@ $("#editMovie").submit(event => {
     modifyData("PUT", url, movieObj);
 
 });
+
+$("#addBtn").click(function (e){
+    $("#addMovie").removeClass("d-none")
+
+})
+

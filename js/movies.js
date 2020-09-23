@@ -38,7 +38,28 @@ function createMovieCard(obj) {
 
     $movieCard.find(".card-header").attr("id", `movie${obj.id}`);
     $movieCard.find(".movieTitle").text(obj.title);
-    $movieCard.find(".movieRating").text(obj.rating);
+    $movieCard.find(".movieRating").html(`<i class="far fa-meh-rolling-eyes rating1"></i>
+    <i class="far fa-frown rating2"></i>
+    <i class="far fa-meh rating3"></i>
+    <i class="far fa-smile rating4"></i>`);
+    $movieCard.find("i").hover(function (){
+        $(this).removeClass("far").addClass("fas")
+    },
+        function (){
+        let rating = "rating" + obj.rating
+            if (!$(this).hasClass(rating)){
+            $(this).removeClass("fas").addClass("far")
+            }
+        }).click(function (e){
+        e.stopPropagation();
+        console.log($(this).attr("class"))
+        let classes = $(this).attr("class")
+        let rating = classes[classes.indexOf("rating") + 6]
+        let movieObj = {rating:parseInt(rating)}
+        const url = `${baseURL + obj.id}`;
+        modifyData("PATCH", url, movieObj)
+    })
+    $movieCard.find(".rating" + obj.rating).removeClass("far").addClass("fas")
     $movieCard.find(".headerBtn").attr({
         "data-target": `#collapse${obj.id}`,
         "aria-controls": `collapse${obj.id}`,

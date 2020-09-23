@@ -18,12 +18,22 @@
     <div class="row justify-content-center">
         <div id="movieTable" class="accordion"></div>
     </div>
+<!--    <i class="far fa-meh-rolling-eyes"></i>-->
+<!--    <i class="far fa-frown"></i>-->
+<!--    <i class="far fa-meh"></i>-->
+<!--    <i class="far fa-smile"></i>-->
 
-<!--    <form id="addMovie">-->
-<!--        <input id="titleInput" type="text" placeholder="title">-->
-<!--        <input id="ratingInput" type="text" placeholder="rating">-->
-<!--        <input id="submitInput" type="submit">-->
-<!--    </form>-->
+<!--    <i class="fas fa-smile"></i>-->
+<!--    <i class="fas fa-frown"></i>-->
+<!--    <i class="fas fa-meh"></i>-->
+<!--    <i class="fas fa-meh-rolling-eyes"></i>-->
+
+    <i class="fas fa-plus-square" id="addBtn"></i>
+    <form class="d-none" id="addMovie">
+        <input id="titleInput" type="text" placeholder="title">
+        <input id="ratingInput" type="text" placeholder="rating">
+        <input id="submitInput" type="submit">
+    </form>
 
 <!--    <form id="editMovie">-->
 <!--        <input id="titleEdit" type="text" placeholder="title">-->
@@ -36,7 +46,7 @@
     <div class="card-header">
         <a href="#" class="headerBtn collapsed row" type="button" data-toggle="collapse" aria-expanded="false">
             <div class="col-6 movieTitle"></div>
-            <div class="col-6 text-right movieRating"></div>
+            <div class="col-6 text-right movieRating" style="z-index: 10"></div>
         </a>
     </div>
     <div class="cardBodyDiv collapse" data-parent="#movieTable">
