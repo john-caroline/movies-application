@@ -1,5 +1,3 @@
-
-
 :root {
     --darkBlue: #121CB4;
     --purple: #706193;
@@ -12,4 +10,8 @@
 }
 body {
     background-color: var(--purple);
+}
+
+.accordion {
+    width: 50%;
 }
