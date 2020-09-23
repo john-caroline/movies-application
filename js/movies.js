@@ -93,7 +93,6 @@ function modifyData(method, url, obj) {
     }
 
     fetch(url, options)
-        .then(response => console.log(response))
         .then(loadHTML)
         .catch(error => console.error(error));
 }

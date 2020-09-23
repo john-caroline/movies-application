@@ -47,12 +47,17 @@ $("#searchMovie").submit(function (e) {
             $("#previous").click(function (e) {
                 e.preventDefault();
                 previousPage();
-            })
+            });
+
+            $("#next").click(function (e) {
+                e.preventDefault();
+                nextPage();
+            });
 
             $(".pageNumber").click(function (e) {
                 e.preventDefault();
-                turnPageTo($(this));
-            })
+                turnPageTo($(this).parent());
+            });
         });
 });
 
@@ -92,29 +97,33 @@ function populatePageNav(totalPages) {
 }
 
 function previousPage() {
-    let $active = $(".active");
-    let currentPage = $active.text();
-    let page = parseInt(currentPage) - 1;
+    const $active = $(".active");
+    const currentPage = $active.text();
+    const page = (parseInt(currentPage) - 1);
 
-    if (page > 0) {
-        let searchStr = $("#addSearch").val();
-        let $prev = $active.prev();
+    if (page >= 1) {
+        turnPageTo($active.prev());
+    }
+}
 
-        $active.removeClass("active");
-        $prev.addClass("active");
+function nextPage() {
+    const $active = $(".active");
+    const currentPage = $active.text();
+    const page = parseInt(currentPage) + 1;
 
-        getData(searchStr, page);
+    if (page <= 10) {
+        turnPageTo($active.next());
     }
 }
 
 function turnPageTo($pageClicked) {
-    let page = $pageClicked.text();
-    let searchStr = $("#addSearch").val();
+    const page = $pageClicked.text();
+    const searchStr = $("#addSearch").val();
+
     $(".active").removeClass("active");
+    $pageClicked.addClass("active");
 
-    $pageClicked.parent().addClass("active");
-
-    getData(searchStr, page)
+    getData(searchStr, page);
 }
 
 function getData(searchStr, page = 1) {
