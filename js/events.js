@@ -47,7 +47,7 @@ $("#searchMovie").submit(function (e) {
             console.log(totalPages);
             let searchPage = $("#searchPage");
             searchPage.html(`<li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
+                <a class="page-link" id="previous" href="#" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
                 </a>
@@ -58,12 +58,39 @@ $("#searchMovie").submit(function (e) {
                 i++;
             }
             searchPage.append(`<li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" id="next" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
                 </a>
             </li>`)
             searchPage.find("li:nth-of-type(2)").addClass("active");
+
+
+            $("#previous").click(function(e) {
+                e.preventDefault();
+                let currentPage = $(".active").text();
+                let page = parseInt(currentPage) - 1;
+
+                if (page > 0) {
+                    let searchStr = $("#addSearch").val();
+                    let $prev = $(".active").prev();
+
+                    $(".active").removeClass("active");
+                    $prev.addClass("active");
+                    fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=${page}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            let arr = data.Search;
+                            $("#searchResults").empty();
+                            for (let obj of arr) {
+                                $("#searchResults").append($(document.createElement("div")).text(obj.Title));
+                            }
+                        })
+                }
+            })
+
+
+
             $(".pageNumber").click(function(e) {
                 e.preventDefault();
                 let searchStr = $("#addSearch").val();
