@@ -79,10 +79,6 @@ function deleteItem(id) {
 
 }
 
-// fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=summer`)
-//     .then(response => response.json())
-//     .then(data => console.log(data));
-
 function modifyData(method, url, obj) {
 
     const options = {
