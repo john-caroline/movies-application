@@ -112,7 +112,7 @@ function fillData(data) {
     console.log(data.Poster);
 
     let $titleDiv = $(document.createElement("div")).addClass("text-center dataTitle");
-    $titleDiv.text(data.Title);
+    $titleDiv.text(data.Title).attr("id", "movieTitle");
 
     let $topHalf = $(document.createElement("div"));
     $topHalf.addClass("row");
@@ -155,6 +155,12 @@ function fillData(data) {
 // }
 }
 
+$("#addToList").click(function (){
+    let title = $("#movieTitle").text()
+    let data = movieCache[title]
+    modifyData("POST", baseURL, data);
+    $("#movieTable").append(createMovieCard(data))
+})
 
 function populatePageNav(totalPages) {
     let searchPage = $("#searchPage");

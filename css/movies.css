@@ -47,3 +47,26 @@ a:hover {
     font-weight: bold;
     font-size: 12px;
 }
+
+#load {
+    border: 16px solid #050505; /* Light grey */
+    border-top: 16px solid #02395d; /* Blue */
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    border-right: 16px solid var(--seaFoam);
+    border-bottom: 16px solid var(--softPurple);
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

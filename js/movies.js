@@ -40,7 +40,7 @@ function createMovieCard(obj) {
         .html($("#movieCardTemplate").html());
 
     // $movieCard.find(".card-header").attr("id", `movie${obj.id}`);
-    $movieCard.find(".movieTitle").text(obj.title);
+    $movieCard.find(".movieTitle").text(obj.Title);
     $movieCard.find(".movieRating").html(
         `<i class="far fa-meh-rolling-eyes rating1"></i>
         <i class="far fa-frown rating2"></i>
@@ -82,7 +82,12 @@ function createMovieCard(obj) {
         "id": `collapse${obj.id}`,
         "aria-labelledby": `movie${obj.id}`,
     });
-    $movieCard.find(".card-body").text(obj.title);
+    $movieCard.find(".card-body").html(`${obj.Title}<button id = "edit">Edit</button><button id ="delete">Delete</button>`);
+    $movieCard.find("#delete").click(function (){
+        let id = $movieCard.attr("id")
+        $("#" + id).remove()
+        deleteItem(id.replace("movie", ""))
+    })
     return $movieCard;
 }
 
