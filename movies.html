@@ -27,59 +27,60 @@
             <label class="sideLabel" for="titleSearch">Genre</label>
             <input type="text" class="form-control" id="genreSearch" placeholder="Enter Genre">
         </div>
-        <div class="form-group">
-            <label class="sideLabel" for="titleSearch">Score</label>
-            <input type="text" class="form-control" id="ratingSearch" placeholder="Enter User Score">
-        </div>
+        <!--        <div class="form-group">-->
+        <!--            <label class="sideLabel" for="titleSearch">Score</label>-->
+        <!--            <input type="text" class="form-control" id="ratingSearch" placeholder="Enter User Score">-->
+        <!--        </div>-->
         <label class="sideLabel" for="titleSearch">Rating</label>
-        <div class="d-flex justify-content-center">
+        <div id="checkboxes" class="d-flex justify-content-center">
             <div class="form-check form-check-inline ">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                <label class="form-check-label" for="inlineCheckbox1"><i class="fas fa-meh-rolling-eyes rating1"></i>
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
+                <label class="form-check-label" for="inlineCheckbox1"><i class="fas fa-meh-rolling-eyes"></i>
                 </label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked>
                 <label class="form-check-label" for="inlineCheckbox1"><i class="fas fa-frown rating1"></i>
                 </label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" checked>
                 <label class="form-check-label" for="inlineCheckbox1"><i class="fas fa-meh rating1"></i>
                 </label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4" checked>
                 <label class="form-check-label" for="inlineCheckbox1"><i class="fas fa-smile rating1"></i>
                 </label>
             </div>
         </div>
     </form>
-    <!-- Button trigger modal -->
-    <a href="#" id="addBtn" type="button" style="width: auto" data-toggle="modal" data-target="#addMovieModal">
-        <i class="fas fa-plus-square"></i>
-    </a>
-    <a href="#" type = "button" id="quickAdd" style="font-size: 2em"><i class="fab fa-searchengin"></i></a>
+    <div class="d-flex mt-3" id="addControls">
+        <div class="col-6">
+            <div class="d-flex flex-column">
+                <a href="#" id="addBtn" type="button" style="width: auto" data-toggle="modal"
+                   data-target="#exampleModal">
+                    <i class="fas fa-plus-square"></i>
+                </a>
+                <div class="text-center" style="color: white">Add custom</div>
+            </div>
+        </div>
 
+        <div class="col-6">
+            <div class="d-flex flex-column">
+                <a href="#" type="button" id="quickAdd" data-toggle="modal" data-target="#addMovieModal">
+                    <i class="fab fa-searchengin"></i>
+                </a>
+                <div class="text-center" style="color: white">Search</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="main">
-
     <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 </div>
 
-
-<script>
-    function openNav() {
-        document.getElementById("mySidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
-    }
-
-    function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
-    }
-</script>
 <div id="load" class="d-none"></div>
 
 <div class="container">
@@ -95,13 +96,35 @@
     <!--    </form>-->
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enter movie title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input id="newMovieTitle" type="text" placeholder="Enter Movie Title">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="saveTitle" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Modal to add movie -->
 <div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog" aria-labelledby="addMovieModalTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="movieModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="movieModalLongTitle">Add a movie</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -138,7 +161,7 @@
 <!-- Modal to edit movie -->
 <div class="modal fade" id="editMovieModal" tabindex="-1" role="dialog" aria-labelledby="editMovieModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editMovieModalLabel">Edit Movie</h5>

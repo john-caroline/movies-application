@@ -7,6 +7,15 @@
 // allow users to filter/search
 // use OMDB
 
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+}
 
 const baseURL = "https://platinum-satisfying-caption.glitch.me/movies/";
 
@@ -21,7 +30,12 @@ function loadHTML() {
 
     fetch(baseURL)
         .then(response => response.json())
-        .then(data => generateHTML(data))
+        .then(data => {
+            generateHTML(data);
+            for (let obj of data) {
+                movieCache[obj.Title] = obj;
+            }
+        })
         .then(() => $load.addClass("d-none"));
 }
 
@@ -125,7 +139,6 @@ $("#saveEdit").click(function() {
 
     let $newElement = createMovieCard(movieObj);
     const url = `${baseURL + id}`;
-    console.log(url);
     $oldElement.replaceWith($newElement);
     modifyData("PATCH", url, movieObj);
 });

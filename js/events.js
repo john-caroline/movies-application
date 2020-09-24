@@ -1,33 +1,18 @@
 let searchCache = new Array(10).fill(0);
 let movieCache = {};
 
-$("#addMovie").submit(event => {
-    event.preventDefault();
-
+$("#saveTitle").click(function() {
+    let title = $("#newMovieTitle").val();
     const movieObj = {
-        title: $("#titleInput").val(),
-        rating: $("#ratingInput").val(),
-    };
+        Title: title
+    }
 
+    movieCache[title] = {};
     modifyData("POST", baseURL, movieObj);
-
-    $("#addMovie").addClass("d-none")
+    $("#movieTable").append(createMovieCard(movieObj));
 });
 
-$("#editMovie").submit(event => {
-    event.preventDefault();
-
-    const movieObj = {
-        title: $("#titleEdit").val(),
-        rating: $("#ratingEdit").val(),
-    };
-    const url = `${baseURL + $("#submitEdit").attr("currentEdit")}`;
-
-    modifyData("PUT", url, movieObj);
-
-});
-
-//sumbission of user input to search for a movie via title
+//submission of user input to search for a movie via title
 $("#searchMovie").submit(function (e) {
     e.preventDefault();
     let searchStr = $("#addSearch").val();
@@ -121,8 +106,8 @@ function fillData(data) {
         let $posterDiv = $(document.createElement("div"));
         let $img = $(document.createElement("img"));
         $img.attr("src", data.Poster);
-        $img.attr("height", "200px");
-        $posterDiv.addClass("col-6").append($img);
+        $img.attr("height", "240px");
+        $posterDiv.addClass("col-6 p-0").append($img);
         $topHalf.append($posterDiv);
     }
 
@@ -228,5 +213,57 @@ function getData(searchStr, page = 1) {
             });
     } else {
         populateSearchResults(searchCache[page - 1]);
+    }
+}
+
+$("#titleSearch").on("input", function() {
+    let title = $(this).val();
+    let genre = $("#genreSearch").val();
+    let ratings = [];
+
+    for (let i = 1; i <= 4; i++) {
+        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
+    }
+    filterTable(title, genre, ratings);
+
+});
+
+$("#genreSearch").on("input", function() {
+    let title = $("#titleSearch").val();
+    let genre = $(this).val()
+    let ratings = [];
+
+    for (let i = 1; i <= 4; i++) {
+        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
+    }
+    filterTable(title, genre, ratings);
+});
+
+$("#checkboxes .form-check-input").change(function() {
+    let title = $("#titleSearch").val();
+    let genre = $("#genreSearch").val()
+    let ratings = [];
+
+    for (let i = 1; i <= 4; i++) {
+        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
+    }
+
+    filterTable(title, genre, ratings);
+});
+
+function filterTable(title, genre, ratings) {
+    for (let child of $("#movieTable").children()) {
+        let t = $(child).find(".movieTitle").text();
+        let genres = movieCache[t].Genre;
+        let rating = movieCache[t].rating;
+        let hasGenre = genres.toLowerCase().includes(genre.toLowerCase().trim());
+        let hasPartialTitle = t.toLowerCase().includes(title.trim().toLowerCase());
+
+        if (!hasPartialTitle || !hasGenre || !ratings[rating - 1]) {
+            $(child).hide();
+        } else {
+            $(child).show();
+        }
+
     }
 }

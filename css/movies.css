@@ -6,7 +6,7 @@
 }
 
 *{
-    font-family: 'Mallanna', sans-serif;
+    /*font-family: 'Mallanna', sans-serif;*/
     /*color: var(--softPurple);*/
 }
 body {
@@ -97,7 +97,7 @@ a:hover {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: var(--seaFoam);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
@@ -134,9 +134,25 @@ a:hover {
     .sidenav a {font-size: 18px;}
 }
 
-.form-control{
+#sideForm .form-control{
     width: 75%;
     margin: 0 auto;
+}
 
+#sideForm i {
+    font-size: 24px;
+}
 
+.card i {
+    font-size: 24px;
+    color: var(--darkBlue);
+}
+
+#addControls i {
+    font-size: 40px;
+    color: var(--softPurple);
+}
+
+#addControls i:hover {
+    color: var(--purple);
 }
