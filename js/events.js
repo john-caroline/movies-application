@@ -1,3 +1,6 @@
+let searchCache = new Array(10).fill(0);
+let movieCache = {};
+
 $("#addMovie").submit(event => {
     event.preventDefault();
 
@@ -34,11 +37,12 @@ $("#addBtn").click(function (e) {
 $("#searchMovie").submit(function (e) {
     e.preventDefault();
     let searchStr = $("#addSearch").val();
+    searchCache = new Array(10).fill(0);
 
     fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=1`)
         .then(response => response.json())
         .then(data => {
-
+            searchCache[0] = data;
             populateSearchResults(data);
 
             let totalPages = Math.ceil(parseInt(data.totalResults) / 10);
@@ -66,8 +70,33 @@ function populateSearchResults(data) {
     let $results = $("#searchResults");
     $results.empty();
 
+    $("#searchPlaceholder").addClass("d-none");
+
     for (let obj of arr) {
-        $results.append($(document.createElement("div")).text(obj.Title));
+        $results.append($(document.createElement("li")).text(obj.Title));
+    }
+    $results.find("li").hover(
+        function () {
+            $(this).addClass("titleHover");
+        },
+        function () {
+            $(this).removeClass("titleHover");
+        }).click(
+        function () {
+            let title = $(this).text();
+            $("#dataPlaceholder").addClass("d-none");
+
+            populateData(title);
+        });
+}
+
+function populateData(title) {
+    if (!movieCache[title]) {
+        fetch(`https://omdbapi.com/?apikey=${omdbToken}&t=${title}`)
+            .then(response => response.json())
+            .then(data => {
+                movieCache[title] = data;
+            });
     }
 }
 
@@ -87,12 +116,13 @@ function populatePageNav(totalPages) {
         searchPage.append(`<li class="page-item"><a class="page-link pageNumber" href="#">${i}</a></li>`);
         i++;
     }
-    searchPage.append(`<li class="page-item">
-                <a class="page-link" id="next" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </li>`);
+    searchPage.append(
+        `<li class="page-item">
+            <a class="page-link" id="next" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>`);
     searchPage.find("li:nth-of-type(2)").addClass("active");
 }
 
@@ -127,25 +157,14 @@ function turnPageTo($pageClicked) {
 }
 
 function getData(searchStr, page = 1) {
-    fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=${page}`)
-        .then(response => response.json())
-        .then(data => {
-            populateSearchResults(data);
-        });
+    if (searchCache[page - 1] === 0) {
+        fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=${page}`)
+            .then(response => response.json())
+            .then(data => {
+                searchCache[page - 1] = data;
+                populateSearchResults(data);
+            });
+    } else {
+        populateSearchResults(searchCache[page - 1]);
+    }
 }
-
-`<li class="page-item">
-    <a class="page-link" href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-        <span class="sr-only">Previous</span>
-    </a>
-</li>
-<li class="page-item active"><a class="page-link" href="#">1</a></li>
-<li class="page-item"><a class="page-link" href="#">2</a></li>
-<li class="page-item"><a class="page-link" href="#">3</a></li>
-<li class="page-item">
-    <a class="page-link" href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-        <span class="sr-only">Next</span>
-    </a>
-</li>`

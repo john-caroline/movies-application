@@ -7,6 +7,7 @@
 // allow users to filter/search
 // use OMDB
 
+
 const baseURL = "https://platinum-satisfying-caption.glitch.me/movies/";
 
 loadHTML();
@@ -25,6 +26,7 @@ function loadHTML() {
 }
 
 function generateHTML(data) {
+
     for (let obj of data) {
         let $newCard = createMovieCard(obj);
         $("#movieTable").append($newCard);
@@ -34,9 +36,10 @@ function generateHTML(data) {
 function createMovieCard(obj) {
     let $movieCard = $(document.createElement("div"))
         .addClass("card")
+        .attr("id", `movie${obj.id}`)
         .html($("#movieCardTemplate").html());
 
-    $movieCard.find(".card-header").attr("id", `movie${obj.id}`);
+    // $movieCard.find(".card-header").attr("id", `movie${obj.id}`);
     $movieCard.find(".movieTitle").text(obj.title);
     $movieCard.find(".movieRating").html(
         `<i class="far fa-meh-rolling-eyes rating1"></i>
@@ -46,27 +49,31 @@ function createMovieCard(obj) {
 
     $movieCard.find("i").hover(
         function () {
-            $(this).removeClass("far").addClass("fas")
+            $(this).removeClass("far").addClass("fas");
         },
         function () {
-            let rating = "rating" + obj.rating
-            if (!$(this).hasClass(rating)) {
+            if (!$(this).hasClass("currentRating")) {
                 $(this).removeClass("fas").addClass("far")
             }
         });
 
-    $movieCard.click(function (e) {
-        e.stopPropagation();
+    $movieCard.find("i").click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
 
-        const classes = $(this).attr("class");
-        const rating = classes[classes.indexOf("rating") + 6];
-        const movieObj = {rating: parseInt(rating)};
-        const url = `${baseURL + obj.id}`;
+            const classes = $(this).attr("class");
+            const rating = classes[classes.indexOf("rating") + 6];
+            console.log(rating);
+            $(this).siblings().removeClass("currentRating fas").addClass("far");
+            $(this).addClass("currentRating");
 
-        modifyData("PATCH", url, movieObj);
-    });
+            const movieObj = {rating: parseInt(rating)};
+            const url = `${baseURL + obj.id}`;
 
-    $movieCard.find(".rating" + obj.rating).removeClass("far").addClass("fas")
+            modifyData("PATCH", url, movieObj);
+        });
+
+    $movieCard.find(".rating" + obj.rating).removeClass("far").addClass("fas").addClass("currentRating");
     $movieCard.find(".headerBtn").attr({
         "data-target": `#collapse${obj.id}`,
         "aria-controls": `collapse${obj.id}`,
@@ -100,6 +107,5 @@ function modifyData(method, url, obj) {
     }
 
     fetch(url, options)
-        .then(loadHTML)
         .catch(error => console.error(error));
 }

@@ -19,3 +19,16 @@ body {
 a:hover {
     text-decoration: none;
 }
+
+#searchResults {
+    min-height: 300px;
+    list-style: none;
+}
+
+/*#searchResults li:nth-of-type(even) {*/
+/*    background-color: lightgray;*/
+/*}*/
+
+.titleHover {
+    background-color: lightskyblue;
+}
