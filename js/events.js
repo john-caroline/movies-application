@@ -27,17 +27,13 @@ $("#editMovie").submit(event => {
 
 });
 
-$("#addBtn").click(function (e) {
-    // $("#addMovie").removeClass("d-none")
-    $("#searchMovie").removeClass("d-none");
-    $("#pages").removeClass("d-none");
-
-})
-
+//sumbission of user input to search for a movie via title
 $("#searchMovie").submit(function (e) {
     e.preventDefault();
     let searchStr = $("#addSearch").val();
     searchCache = new Array(10).fill(0);
+
+    $("#pages").removeClass("d-none");
 
     fetch(`https://omdbapi.com/?apikey=${omdbToken}&s=${searchStr}&type=movie&page=1`)
         .then(response => response.json())
@@ -65,6 +61,7 @@ $("#searchMovie").submit(function (e) {
         });
 });
 
+//receives current page of data and fills the searchResults div
 function populateSearchResults(data) {
     let arr = data.Search;
     let $results = $("#searchResults");
@@ -96,9 +93,68 @@ function populateData(title) {
             .then(response => response.json())
             .then(data => {
                 movieCache[title] = data;
+                fillData(data);
             });
+    } else {
+        fillData(movieCache[title]);
     }
 }
+
+function fillData(data) {
+    const top = ["Released", "Genres", "Rated",
+        "Runtime"];
+    const bottom = ["Plot", "Actors", "Director",
+        "Writer"];
+
+    let $dataDiv = $("#dataDiv");
+
+    $dataDiv.empty();
+    console.log(data.Poster);
+
+    let $titleDiv = $(document.createElement("div")).addClass("text-center dataTitle");
+    $titleDiv.text(data.Title);
+
+    let $topHalf = $(document.createElement("div"));
+    $topHalf.addClass("row");
+
+    if (data.Poster.includes("http")) {
+        let $posterDiv = $(document.createElement("div"));
+        let $img = $(document.createElement("img"));
+        $img.attr("src", data.Poster);
+        $img.attr("height", "200px");
+        $posterDiv.addClass("col-6").append($img);
+        $topHalf.append($posterDiv);
+    }
+
+    let $detailsDiv = $(document.createElement("div")).addClass("col-6");
+
+    for (let property of top) {
+        if (data[property]) {
+            let $element = $(document.createElement("div"));
+            $element.html(`<span class="prop">${property}:</span><br>${data[property]}`);
+            $detailsDiv.append($element);
+        }
+    }
+    $topHalf.append($detailsDiv);
+    $dataDiv.append($titleDiv, $topHalf);
+
+    for (let property of bottom) {
+        if (data[property]) {
+            let $element = $(document.createElement("div"));
+            $element.html(`<span class="prop">${property}:</span><br>${data[property]}`);
+            $dataDiv.append($element);
+        }
+    }
+
+// for (let property of properties) {
+//     if (data[property]) {
+//         let $element = $(document.createElement("div"));
+//         $element.text(`${property}: ${data[property]}`)
+//         $dataDiv.append($element);
+//     }
+// }
+}
+
 
 function populatePageNav(totalPages) {
     let searchPage = $("#searchPage");
