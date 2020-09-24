@@ -19,3 +19,31 @@ body {
 a:hover {
     text-decoration: none;
 }
+
+#searchResults {
+    height: 300px;
+    list-style: none;
+}
+
+/*#searchResults li:nth-of-type(even) {*/
+/*    background-color: lightgray;*/
+/*}*/
+
+.titleHover {
+    background-color: lightskyblue;
+}
+
+#dataDiv {
+    overflow-y: scroll;
+    max-height: 300px;
+}
+
+.dataTitle {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.prop {
+    font-weight: bold;
+    font-size: 12px;
+}
