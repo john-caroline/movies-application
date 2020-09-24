@@ -101,7 +101,7 @@ function populateData(title) {
 }
 
 function fillData(data) {
-    const top = ["Released", "Genres", "Rated",
+    const top = ["Released", "Genre", "Rated",
         "Runtime"];
     const bottom = ["Plot", "Actors", "Director",
         "Writer"];
