@@ -77,7 +77,6 @@ function createMovieCard(obj) {
 
         const classes = $(this).attr("class");
         const rating = classes[classes.indexOf("rating") + 6];
-        console.log(rating);
         $(this).siblings().removeClass("currentRating fas").addClass("far");
         $(this).addClass("currentRating");
 
@@ -195,6 +194,12 @@ function modifyData(method, url, obj) {
         options.body = JSON.stringify(obj);
     }
 
-    fetch(url, options)
+    return fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (method === "POST") {
+                movieCache[data.Title].id = data.id;
+            }
+        })
         .catch(error => console.error(error));
 }

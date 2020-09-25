@@ -96,7 +96,6 @@ function fillData(data) {
     let $dataDiv = $("#dataDiv");
 
     $dataDiv.empty();
-    console.log(data.Poster);
 
     let $titleDiv = $(document.createElement("div")).addClass("text-center dataTitle");
     $titleDiv.text(data.Title).attr("id", "movieTitle");
@@ -136,9 +135,18 @@ function fillData(data) {
 
 $("#addToList").click(function (){
     let title = $("#movieTitle").text();
+
+    movieCache[title].review = "";
+    movieCache[title].rating = 0;
+
     let data = movieCache[title];
-    modifyData("POST", baseURL, data);
-    $("#movieTable").append(createMovieCard(data))
+
+    $("#addMovieModal").modal("toggle");
+    modifyData("POST", baseURL, data)
+        .then(() => {
+            data = movieCache[title];
+            $("#movieTable").append(createMovieCard(data))
+        });
 })
 
 function populatePageNav(totalPages) {
@@ -260,4 +268,6 @@ $("#saveEdit").click(function() {
     const url = `${baseURL + id}`;
     $oldElement.replaceWith($newElement);
     modifyData("PATCH", url, movieObj);
+
+    $("#editMovieModal").modal('toggle');
 });
