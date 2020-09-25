@@ -31,10 +31,10 @@ function loadHTML() {
     fetch(baseURL)
         .then(response => response.json())
         .then(data => {
-            generateHTML(data);
             for (let obj of data) {
                 movieCache[obj.Title] = obj;
             }
+            generateHTML(data);
         })
         .then(() => $load.addClass("d-none"));
 }
@@ -103,11 +103,31 @@ function createMovieCard(obj) {
     }
 
     $movieCard.find("#review").click(function(e) {
-        e.preventDefault();
         $(`.review${obj.id}`).toggleClass("d-none");
-        $(this).prop("disabled", "true");
+        $(this).prop("disabled", true);
+    });
 
-    })
+    $movieCard.find("#reviewDiscard").click(function(){
+        $movieCard.find("textarea").val(obj.review);
+        $(`.review${obj.id}`).toggleClass("d-none");
+        $movieCard.find("#review").prop("disabled", false);
+    });
+
+    $movieCard.find("#reviewSave").click(function() {
+        const url = `${baseURL}${obj.id}`;
+        const review = $movieCard.find("textarea").val();
+
+        const movieObj = {
+            review: review
+        }
+
+        movieCache[obj.Title].review = review;
+        $movieCard.find("#reviewDiv").text(review);
+        $(`.review${obj.id}`).toggleClass("d-none");
+        $movieCard.find("#review").prop("disabled", false);
+
+        modifyData("PATCH", url, movieObj);
+    });
 
     $movieCard.find("#edit").click(function() {
         const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
@@ -134,7 +154,7 @@ function createCardBodyHTML(obj) {
     let html =
         `<div class="d-flex text-center">
             <div class="col-4">
-                <button type="button" class="btn btn-link" id="review">${$(review).text() === "" ? "Add": "Edit"} Review</button>
+                <button type="button" class="btn btn-link" id="review">${obj.review !== "" ? "Edit": "Add"} Review</button>
             </div>
             <div class="col-4">
                 <button type="button" class="btn btn-link" id="edit" type="button" data-toggle="modal"
@@ -144,8 +164,13 @@ function createCardBodyHTML(obj) {
                 <button type="button" class="btn btn-link" id="delete">Delete</a>
             </div>
         </div>
-        <div class="w-100 review${obj.id}">${$(review).text()}</div>
-        <textarea class="w-100 d-none review${obj.id}" style="height: 200px"></textarea>`
+        <div id="reviewDiv" class="w-100 review${obj.id}">${obj.review}</div>
+        <textarea class="w-100 d-none review${obj.id}" style="height: 200px">${obj.review}</textarea>
+        <div class="d-flex justify-content-end">
+            <button id="reviewDiscard" class="d-none review${obj.id}">Discard</button>
+            <button id="reviewSave" class="d-none review${obj.id}">Save</button>
+        </div>`
+
 
     return html;
 }
