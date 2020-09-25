@@ -32,7 +32,7 @@ body {
 }
 
 .accordion {
-    width: 50%;
+    width: 75%;
 }
 
 a:hover {
@@ -118,8 +118,8 @@ a:hover {
 
 .sidenav .closebtn {
     position: absolute;
-    top: 0;
-    right: 25px;
+    top: -15px;
+    right: 5px;
     font-size: 36px;
     margin-left: 50px;
 }
@@ -155,4 +155,20 @@ a:hover {
 
 #addControls i:hover {
     color: var(--purple);
+}
+
+.far {
+    opacity: 30%;
+}
+
+#menu {
+    font-size: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: 10px;
+    left: 20px;
+}
+
+#menu:hover {
+    color: var(--seaFoam);
 }

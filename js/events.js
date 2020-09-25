@@ -55,7 +55,9 @@ function populateSearchResults(data) {
     $("#searchPlaceholder").addClass("d-none");
 
     for (let obj of arr) {
-        $results.append($(document.createElement("li")).text(obj.Title));
+        $results.append(
+            $(document.createElement("li"))
+                .html(`<span class="titleOnly">${obj.Title}</span>&nbsp;(${obj.Year})`));
     }
     $results.find("li").hover(
         function () {
@@ -65,7 +67,7 @@ function populateSearchResults(data) {
             $(this).removeClass("titleHover");
         }).click(
         function () {
-            let title = $(this).text();
+            let title = $(this).find(".titleOnly").text();
             $("#dataPlaceholder").addClass("d-none");
 
             populateData(title);
@@ -130,19 +132,11 @@ function fillData(data) {
             $dataDiv.append($element);
         }
     }
-
-// for (let property of properties) {
-//     if (data[property]) {
-//         let $element = $(document.createElement("div"));
-//         $element.text(`${property}: ${data[property]}`)
-//         $dataDiv.append($element);
-//     }
-// }
 }
 
 $("#addToList").click(function (){
-    let title = $("#movieTitle").text()
-    let data = movieCache[title]
+    let title = $("#movieTitle").text();
+    let data = movieCache[title];
     modifyData("POST", baseURL, data);
     $("#movieTable").append(createMovieCard(data))
 })
@@ -216,30 +210,13 @@ function getData(searchStr, page = 1) {
     }
 }
 
-$("#titleSearch").on("input", function() {
-    let title = $(this).val();
-    let genre = $("#genreSearch").val();
-    let ratings = [];
+$("#titleSearch").on("input", filterTable);
 
-    for (let i = 1; i <= 4; i++) {
-        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
-    }
-    filterTable(title, genre, ratings);
+$("#genreSearch").on("input", filterTable);
 
-});
+$("#checkboxes .form-check-input").change(filterTable);
 
-$("#genreSearch").on("input", function() {
-    let title = $("#titleSearch").val();
-    let genre = $(this).val()
-    let ratings = [];
-
-    for (let i = 1; i <= 4; i++) {
-        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
-    }
-    filterTable(title, genre, ratings);
-});
-
-$("#checkboxes .form-check-input").change(function() {
+function filterTable() {
     let title = $("#titleSearch").val();
     let genre = $("#genreSearch").val()
     let ratings = [];
@@ -248,10 +225,6 @@ $("#checkboxes .form-check-input").change(function() {
         ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
     }
 
-    filterTable(title, genre, ratings);
-});
-
-function filterTable(title, genre, ratings) {
     for (let child of $("#movieTable").children()) {
         let t = $(child).find(".movieTitle").text();
         let genres = movieCache[t].Genre;
@@ -264,6 +237,27 @@ function filterTable(title, genre, ratings) {
         } else {
             $(child).show();
         }
-
     }
 }
+
+$("#saveEdit").click(function() {
+    const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
+        "Runtime", "Released"];
+
+    let id = $("#edit").attr("movieID");
+    let $editForm = $("#editForm");
+    let movieObj = {};
+
+    let $oldElement = $(`#movie${id}`);
+
+    for (let property of properties) {
+        movieObj[property] = $editForm.find(`#${property.toLowerCase()}`).val();
+    }
+    movieObj.id = parseInt(id);
+    movieObj.Title = $("#editTitle").text();
+
+    let $newElement = createMovieCard(movieObj);
+    const url = `${baseURL + id}`;
+    $oldElement.replaceWith($newElement);
+    modifyData("PATCH", url, movieObj);
+});

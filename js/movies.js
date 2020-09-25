@@ -96,11 +96,18 @@ function createMovieCard(obj) {
         "id": `collapse${obj.id}`,
         "aria-labelledby": `movie${obj.id}`,
     });
-    $movieCard.find(".card-body").html(
-        `${obj.Title}
-        <button id="edit" type="button" class="btn btn-primary" data-toggle="modal"
-            data-target="#editMovieModal">Edit</button>
-        <button id="delete">Delete</button>`);
+    $movieCard.find(".card-body").html(createCardBodyHTML(obj));
+
+    if (obj.review === undefined) {
+        obj.review = "";
+    }
+
+    $movieCard.find("#review").click(function(e) {
+        e.preventDefault();
+        $(`.review${obj.id}`).toggleClass("d-none");
+        $(this).prop("disabled", "true");
+
+    })
 
     $movieCard.find("#edit").click(function() {
         const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
@@ -121,27 +128,27 @@ function createMovieCard(obj) {
     return $movieCard;
 }
 
-$("#saveEdit").click(function() {
-    const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
-        "Runtime", "Released"];
+function createCardBodyHTML(obj) {
 
-    let id = $("#edit").attr("movieID");
-    let $editForm = $("#editForm");
-    let movieObj = {};
+    let review = "#review" + obj.id;
+    let html =
+        `<div class="d-flex text-center">
+            <div class="col-4">
+                <button type="button" class="btn btn-link" id="review">${$(review).text() === "" ? "Add": "Edit"} Review</button>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-link" id="edit" type="button" data-toggle="modal"
+                    data-target="#editMovieModal">Edit Movie Details</a>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-link" id="delete">Delete</a>
+            </div>
+        </div>
+        <div class="w-100 review${obj.id}">${$(review).text()}</div>
+        <textarea class="w-100 d-none review${obj.id}" style="height: 200px"></textarea>`
 
-    let $oldElement = $(`#movie${id}`);
-
-    for (let property of properties) {
-        movieObj[property] = $editForm.find(`#${property.toLowerCase()}`).val();
-    }
-    movieObj.id = parseInt(id);
-    movieObj.Title = $("#editTitle").text();
-
-    let $newElement = createMovieCard(movieObj);
-    const url = `${baseURL + id}`;
-    $oldElement.replaceWith($newElement);
-    modifyData("PATCH", url, movieObj);
-});
+    return html;
+}
 
 function deleteItem(id) {
     const url = `${baseURL + id}`;
