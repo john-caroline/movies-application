@@ -74,7 +74,7 @@ function populateSearchResults(data) {
         });
 }
 
-function populateData(title) {
+function populateData(title, div="#dataDiv") {
     if (!movieCache[title]) {
         fetch(`https://omdbapi.com/?apikey=${omdbToken}&t=${title}`)
             .then(response => response.json())
@@ -83,17 +83,17 @@ function populateData(title) {
                 fillData(data);
             });
     } else {
-        fillData(movieCache[title]);
+        fillData(movieCache[title], div);
     }
 }
 
-function fillData(data) {
+function fillData(data, div="#dataDiv") {
     const top = ["Released", "Genre", "Rated",
         "Runtime"];
     const bottom = ["Plot", "Actors", "Director",
         "Writer"];
 
-    let $dataDiv = $("#dataDiv");
+    let $dataDiv = $(div);
 
     $dataDiv.empty();
 

@@ -99,29 +99,38 @@ function createMovieCard(obj) {
     $movieCard.find(".headerBtn").attr({
         "data-target": `#collapse${obj.id}`,
         "aria-controls": `collapse${obj.id}`,
+    }).click(function () {
+        if (obj.Title === $("#movieInfo").find("#movieTitle").text()) {
+            $("#movieInfo").text("");
+        } else {
+            populateData(obj.Title, "#movieInfo");
+        }
     });
+
     $movieCard.find(".cardBodyDiv").attr({
         "id": `collapse${obj.id}`,
         "aria-labelledby": `movie${obj.id}`,
     });
+
+
     $movieCard.find(".card-body").html(createCardBodyHTML(obj));
 
     if (obj.review === undefined) {
         obj.review = "";
     }
 
-    $movieCard.find("#review").click(function(e) {
+    $movieCard.find("#review").click(function (e) {
         $(`.review${obj.id}`).toggleClass("d-none");
         $(this).prop("disabled", true);
     });
 
-    $movieCard.find("#reviewDiscard").click(function(){
+    $movieCard.find("#reviewDiscard").click(function () {
         $movieCard.find("textarea").val(obj.review);
         $(`.review${obj.id}`).toggleClass("d-none");
         $movieCard.find("#review").prop("disabled", false);
     });
 
-    $movieCard.find("#reviewSave").click(function() {
+    $movieCard.find("#reviewSave").click(function () {
         const url = `${baseURL}${obj.id}`;
         const review = $movieCard.find("textarea").val();
 
@@ -137,7 +146,7 @@ function createMovieCard(obj) {
         modifyData("PATCH", url, movieObj);
     });
 
-    $movieCard.find("#edit").click(function() {
+    $movieCard.find("#edit").click(function () {
         const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
             "Runtime", "Released"];
         for (let property of properties) {
@@ -162,7 +171,7 @@ function createCardBodyHTML(obj) {
     let html =
         `<div class="d-flex text-center">
             <div class="col-4">
-                <button type="button" class="btn btn-link" id="review">${obj.review !== "" ? "Edit": "Add"} Review</button>
+                <button type="button" class="btn btn-link" id="review">${obj.review !== "" ? "Edit" : "Add"} Review</button>
             </div>
             <div class="col-4">
                 <button type="button" class="btn btn-link" id="edit" type="button" data-toggle="modal"

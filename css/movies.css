@@ -44,17 +44,22 @@ a:hover {
     list-style: none;
 }
 
-/*#searchResults li:nth-of-type(even) {*/
-/*    background-color: lightgray;*/
-/*}*/
-
 .titleHover {
     background-color: lightskyblue;
 }
 
 #dataDiv {
-    overflow-y: scroll;
     max-height: 300px;
+    overflow-y: scroll;
+}
+
+#dataDiv, #movieInfo {
+    overflow-x: hidden;
+    width: 330px
+}
+
+#movieInfo {
+    background-color: var(--softPurple);
 }
 
 .dataTitle {
@@ -171,4 +176,10 @@ a:hover {
 
 #menu:hover {
     color: var(--seaFoam);
+}
+
+#movieInfo {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
