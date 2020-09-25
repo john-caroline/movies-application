@@ -60,6 +60,7 @@ a:hover {
 
 #movieInfo {
     background-color: var(--softPurple);
+    margin: 5px;
 }
 
 .dataTitle {

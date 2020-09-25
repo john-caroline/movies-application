@@ -4,12 +4,22 @@ let movieCache = {};
 $("#saveTitle").click(function() {
     let title = $("#newMovieTitle").val();
     const movieObj = {
-        Title: title
+        Title: title,
+        rating: 0,
+        review: "",
+    }
+    const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
+        "Runtime", "Released", "Poster"];
+    for (let prop of properties) {
+        movieObj[prop] = "(empty)";
     }
 
-    movieCache[title] = {};
-    modifyData("POST", baseURL, movieObj);
-    $("#movieTable").append(createMovieCard(movieObj));
+    $("#saveModal").modal("toggle");
+    movieCache[title] = movieObj;
+    modifyData("POST", baseURL, movieObj)
+        .then(() => {
+            $("#movieTable").append(createMovieCard(movieCache[title]));
+        });
 });
 
 //submission of user input to search for a movie via title
