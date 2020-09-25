@@ -32,7 +32,7 @@ body {
 }
 
 .accordion {
-    width: 50%;
+    width: 60%;
 }
 
 a:hover {
@@ -44,17 +44,23 @@ a:hover {
     list-style: none;
 }
 
-/*#searchResults li:nth-of-type(even) {*/
-/*    background-color: lightgray;*/
-/*}*/
-
 .titleHover {
     background-color: lightskyblue;
 }
 
 #dataDiv {
-    overflow-y: scroll;
     max-height: 300px;
+    overflow-y: scroll;
+}
+
+#dataDiv, #movieInfo {
+    overflow-x: hidden;
+    width: 330px
+}
+
+#movieInfo {
+    background-color: var(--softPurple);
+    margin: 5px;
 }
 
 .dataTitle {
@@ -118,8 +124,8 @@ a:hover {
 
 .sidenav .closebtn {
     position: absolute;
-    top: 0;
-    right: 25px;
+    top: -15px;
+    right: 5px;
     font-size: 36px;
     margin-left: 50px;
 }
@@ -155,4 +161,26 @@ a:hover {
 
 #addControls i:hover {
     color: var(--purple);
+}
+
+.far {
+    opacity: 30%;
+}
+
+#menu {
+    font-size: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: 10px;
+    left: 20px;
+}
+
+#menu:hover {
+    color: var(--seaFoam);
+}
+
+#movieInfo {
+    position: absolute;
+    top: 0;
+    right: 0;
 }

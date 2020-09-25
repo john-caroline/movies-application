@@ -4,12 +4,22 @@ let movieCache = {};
 $("#saveTitle").click(function() {
     let title = $("#newMovieTitle").val();
     const movieObj = {
-        Title: title
+        Title: title,
+        rating: 0,
+        review: "",
+    }
+    const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
+        "Runtime", "Released", "Poster"];
+    for (let prop of properties) {
+        movieObj[prop] = "(empty)";
     }
 
-    movieCache[title] = {};
-    modifyData("POST", baseURL, movieObj);
-    $("#movieTable").append(createMovieCard(movieObj));
+    $("#saveModal").modal("toggle");
+    movieCache[title] = movieObj;
+    modifyData("POST", baseURL, movieObj)
+        .then(() => {
+            $("#movieTable").append(createMovieCard(movieCache[title]));
+        });
 });
 
 //submission of user input to search for a movie via title
@@ -55,7 +65,9 @@ function populateSearchResults(data) {
     $("#searchPlaceholder").addClass("d-none");
 
     for (let obj of arr) {
-        $results.append($(document.createElement("li")).text(obj.Title));
+        $results.append(
+            $(document.createElement("li"))
+                .html(`<span class="titleOnly">${obj.Title}</span>&nbsp;(${obj.Year})`));
     }
     $results.find("li").hover(
         function () {
@@ -65,14 +77,14 @@ function populateSearchResults(data) {
             $(this).removeClass("titleHover");
         }).click(
         function () {
-            let title = $(this).text();
+            let title = $(this).find(".titleOnly").text();
             $("#dataPlaceholder").addClass("d-none");
 
             populateData(title);
         });
 }
 
-function populateData(title) {
+function populateData(title, div="#dataDiv") {
     if (!movieCache[title]) {
         fetch(`https://omdbapi.com/?apikey=${omdbToken}&t=${title}`)
             .then(response => response.json())
@@ -81,20 +93,19 @@ function populateData(title) {
                 fillData(data);
             });
     } else {
-        fillData(movieCache[title]);
+        fillData(movieCache[title], div);
     }
 }
 
-function fillData(data) {
+function fillData(data, div="#dataDiv") {
     const top = ["Released", "Genre", "Rated",
         "Runtime"];
     const bottom = ["Plot", "Actors", "Director",
         "Writer"];
 
-    let $dataDiv = $("#dataDiv");
+    let $dataDiv = $(div);
 
     $dataDiv.empty();
-    console.log(data.Poster);
 
     let $titleDiv = $(document.createElement("div")).addClass("text-center dataTitle");
     $titleDiv.text(data.Title).attr("id", "movieTitle");
@@ -130,21 +141,22 @@ function fillData(data) {
             $dataDiv.append($element);
         }
     }
-
-// for (let property of properties) {
-//     if (data[property]) {
-//         let $element = $(document.createElement("div"));
-//         $element.text(`${property}: ${data[property]}`)
-//         $dataDiv.append($element);
-//     }
-// }
 }
 
 $("#addToList").click(function (){
-    let title = $("#movieTitle").text()
-    let data = movieCache[title]
-    modifyData("POST", baseURL, data);
-    $("#movieTable").append(createMovieCard(data))
+    let title = $("#movieTitle").text();
+
+    movieCache[title].review = "";
+    movieCache[title].rating = 0;
+
+    let data = movieCache[title];
+
+    $("#addMovieModal").modal("toggle");
+    modifyData("POST", baseURL, data)
+        .then(() => {
+            data = movieCache[title];
+            $("#movieTable").append(createMovieCard(data))
+        });
 })
 
 function populatePageNav(totalPages) {
@@ -216,30 +228,13 @@ function getData(searchStr, page = 1) {
     }
 }
 
-$("#titleSearch").on("input", function() {
-    let title = $(this).val();
-    let genre = $("#genreSearch").val();
-    let ratings = [];
+$("#titleSearch").on("input", filterTable);
 
-    for (let i = 1; i <= 4; i++) {
-        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
-    }
-    filterTable(title, genre, ratings);
+$("#genreSearch").on("input", filterTable);
 
-});
+$("#checkboxes .form-check-input").change(filterTable);
 
-$("#genreSearch").on("input", function() {
-    let title = $("#titleSearch").val();
-    let genre = $(this).val()
-    let ratings = [];
-
-    for (let i = 1; i <= 4; i++) {
-        ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
-    }
-    filterTable(title, genre, ratings);
-});
-
-$("#checkboxes .form-check-input").change(function() {
+function filterTable() {
     let title = $("#titleSearch").val();
     let genre = $("#genreSearch").val()
     let ratings = [];
@@ -248,10 +243,6 @@ $("#checkboxes .form-check-input").change(function() {
         ratings.push($(`#inlineCheckbox${i}`).prop("checked"));
     }
 
-    filterTable(title, genre, ratings);
-});
-
-function filterTable(title, genre, ratings) {
     for (let child of $("#movieTable").children()) {
         let t = $(child).find(".movieTitle").text();
         let genres = movieCache[t].Genre;
@@ -259,11 +250,40 @@ function filterTable(title, genre, ratings) {
         let hasGenre = genres.toLowerCase().includes(genre.toLowerCase().trim());
         let hasPartialTitle = t.toLowerCase().includes(title.trim().toLowerCase());
 
-        if (!hasPartialTitle || !hasGenre || !ratings[rating - 1]) {
-            $(child).hide();
-        } else {
-            $(child).show();
-        }
+        // if (!hasPartialTitle || !hasGenre || !ratings[rating - 1]) {
+        //
+        // } else {
+        //
+        // }
 
+        if (hasPartialTitle && hasGenre && (rating === 0 || ratings[rating - 1])) {
+            $(child).show();
+        } else {
+            $(child).hide();
+        }
     }
 }
+
+$("#saveEdit").click(function() {
+    const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
+        "Runtime", "Released"];
+
+    let id = $("#edit").attr("movieID");
+    let $editForm = $("#editForm");
+    let movieObj = {};
+
+    let $oldElement = $(`#movie${id}`);
+
+    for (let property of properties) {
+        movieObj[property] = $editForm.find(`#${property.toLowerCase()}`).val();
+    }
+    movieObj.id = parseInt(id);
+    movieObj.Title = $("#editTitle").text();
+
+    let $newElement = createMovieCard(movieObj);
+    const url = `${baseURL + id}`;
+    $oldElement.replaceWith($newElement);
+    modifyData("PATCH", url, movieObj);
+
+    $("#editMovieModal").modal('toggle');
+});
