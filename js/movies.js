@@ -75,13 +75,22 @@ function createMovieCard(obj) {
         e.stopPropagation();
         e.preventDefault();
 
-        const classes = $(this).attr("class");
-        const rating = classes[classes.indexOf("rating") + 6];
-        $(this).siblings().removeClass("currentRating fas").addClass("far");
-        $(this).addClass("currentRating");
+        let rating;
+
+        if ($(this).hasClass("currentRating")) {
+            $(this).removeClass("currentRating");
+            rating = 0;
+        } else {
+            const classes = $(this).attr("class");
+            rating = classes[classes.indexOf("rating") + 6];
+            $(this).siblings().removeClass("currentRating fas").addClass("far");
+            $(this).addClass("currentRating");
+        }
 
         const movieObj = {rating: parseInt(rating)};
         const url = `${baseURL + obj.id}`;
+
+        movieCache[obj.Title].rating = parseInt(rating);
 
         modifyData("PATCH", url, movieObj);
     });

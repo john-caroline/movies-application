@@ -240,10 +240,16 @@ function filterTable() {
         let hasGenre = genres.toLowerCase().includes(genre.toLowerCase().trim());
         let hasPartialTitle = t.toLowerCase().includes(title.trim().toLowerCase());
 
-        if (!hasPartialTitle || !hasGenre || !ratings[rating - 1]) {
-            $(child).hide();
-        } else {
+        // if (!hasPartialTitle || !hasGenre || !ratings[rating - 1]) {
+        //
+        // } else {
+        //
+        // }
+
+        if (hasPartialTitle && hasGenre && (rating === 0 || ratings[rating - 1])) {
             $(child).show();
+        } else {
+            $(child).hide();
         }
     }
 }
