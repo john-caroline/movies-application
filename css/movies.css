@@ -217,6 +217,12 @@ a:hover {
     color: var(--rum);
 }
 
+.movieTitle {
+        color: #272139;
+}
+
+
+
 #movieInfo {
     position: absolute;
     top: 10%;
@@ -225,6 +231,12 @@ a:hover {
 
 .card-header {
     font-family: 'Headland One', serif;
+
+
+}
+
+.card-body {
+    color: #272139;
 }
 
 .jumbotron {
