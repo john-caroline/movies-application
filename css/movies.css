@@ -184,3 +184,8 @@ a:hover {
     top: 0;
     right: 0;
 }
+
+.card-header {
+    font-family: 'Headland One', serif;
+}
+
