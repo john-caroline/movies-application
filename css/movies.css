@@ -1,16 +1,33 @@
 :root {
-    --darkBlue: #121CB4;
-    --purple: #706193;
-    --softPurple: #f8ebff;
-    --seaFoam: #67BAA7;
+    /*--darkBlue: #121cb4;*/
+    /*--softPurple: #f8ebff;*/
+    /*--seaFoam: #67baa7;*/
+
+
+    --twine: #CA9C65;
+    --rum: #736391;
+    --steelGrey: #272139;
+    --bombay: #B2B7BF;
+    --red: #600502
+
+
 }
 
-*{
+* {
     /*font-family: 'Mallanna', sans-serif;*/
     /*color: var(--softPurple);*/
 }
+
 body {
-    background-color: var(--purple);
+    background-color: var(--rum);
+    /*background-image: url("../img/film.png");*/
+    background-image: url("../img/theater.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+
+
 }
 
 .header {
@@ -23,11 +40,11 @@ body {
     color: #fcf9f9;
 }
 
-.form-check-label{
+.form-check-label {
     color: #f1f1f1;
 }
 
-#sideForm .form-group{
+#sideForm .form-group {
     justify-content: space-between;
 }
 
@@ -35,8 +52,13 @@ body {
     width: 60%;
 }
 
+a{
+    color: var(--rum);
+    font-size: 18px;
+}
 a:hover {
     text-decoration: none;
+    color: var(--twine);
 }
 
 #searchResults {
@@ -45,7 +67,7 @@ a:hover {
 }
 
 .titleHover {
-    background-color: lightskyblue;
+    background-color: #87cefa;
 }
 
 #dataDiv {
@@ -59,8 +81,9 @@ a:hover {
 }
 
 #movieInfo {
-    background-color: var(--softPurple);
+    background-color: var(--steelGrey);
     margin: 5px;
+    color: #f1f1f1;
 }
 
 .dataTitle {
@@ -74,8 +97,8 @@ a:hover {
 }
 
 #load {
-    border: 16px solid #050505; /* Light grey */
-    border-top: 16px solid #02395d; /* Blue */
+    border: 16px solid var(--steelGrey);
+    border-top: 16px solid white;
     border-radius: 50%;
     position: absolute;
     top: 0;
@@ -86,14 +109,18 @@ a:hover {
     width: 120px;
     height: 120px;
     animation: spin 2s linear infinite;
-    border-right: 16px solid var(--seaFoam);
-    border-bottom: 16px solid var(--softPurple);
+    border-right: 16px solid var(--twine);
+    border-bottom: 16px solid var(--red);
 }
 
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .sidenav {
@@ -103,10 +130,16 @@ a:hover {
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: var(--seaFoam);
+    background-color: var(--steelGrey);
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    background-image: url("../img/movie-reel-transparent-background-3.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom left;
+    /*background-size: ;*/
+
 }
 
 .sidenav a {
@@ -132,15 +165,19 @@ a:hover {
 
 #main {
     transition: margin-left .5s;
-    padding: 16px;
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
 }
 
-#sideForm .form-control{
+#sideForm .form-control {
     width: 75%;
     margin: 0 auto;
 }
@@ -151,16 +188,17 @@ a:hover {
 
 .card i {
     font-size: 24px;
-    color: var(--darkBlue);
+    color: var(--rum);
 }
 
 #addControls i {
     font-size: 40px;
-    color: var(--softPurple);
+    color: var(--rum);
 }
 
 #addControls i:hover {
-    color: var(--purple);
+    color: var(--twine);
+    font-size: 2em;
 }
 
 .far {
@@ -176,11 +214,33 @@ a:hover {
 }
 
 #menu:hover {
-    color: var(--seaFoam);
+    color: var(--rum);
 }
+
+.movieTitle {
+        color: #272139;
+}
+
+
 
 #movieInfo {
     position: absolute;
-    top: 0;
+    top: 10%;
     right: 0;
 }
+
+.card-header {
+    font-family: 'Headland One', serif;
+
+
+}
+
+.card-body {
+    color: #272139;
+}
+
+.jumbotron {
+    background: transparent;
+    position: sticky;
+}
+
