@@ -123,7 +123,7 @@ function createMovieCard(obj) {
         obj.review = "";
     }
 
-    $movieCard.find("#review").click(function (e) {
+    $movieCard.find(`#review${obj.id}`).click(function (e) {
         $(`.review${obj.id}`).toggleClass("d-none");
         $(this).prop("disabled", true);
     });
@@ -145,12 +145,12 @@ function createMovieCard(obj) {
         movieCache[obj.Title].review = review;
         $movieCard.find("#reviewDiv").text(review);
         $(`.review${obj.id}`).toggleClass("d-none");
-        $movieCard.find("#review").prop("disabled", false);
+        $movieCard.find(`#review${obj.id}`).prop("disabled", false);
 
         modifyData("PATCH", url, movieObj);
     });
 
-    $movieCard.find("#edit").click(function () {
+    $movieCard.find(`#edit${obj.id}`).click(function () {
         const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
             "Runtime", "Released"];
         for (let property of properties) {
@@ -159,10 +159,10 @@ function createMovieCard(obj) {
         $("#editTitle").text(obj.Title);
     });
 
-    $movieCard.find("#edit").attr("movieID", obj.id);
+    $movieCard.find(`#edit${obj.id}`);
 
-    $movieCard.find("#delete").click(function () {
-        let id = $movieCard.attr("id")
+    $movieCard.find(`#delete${obj.id}`).click(function () {
+        let id = `movie${obj.id}`
         $("#" + id).remove()
         deleteItem(id.replace("movie", ""))
     })
@@ -171,18 +171,17 @@ function createMovieCard(obj) {
 
 function createCardBodyHTML(obj) {
 
-    let review = "#review" + obj.id;
     let html =
         `<div class="d-flex text-center">
             <div class="col-4">
-                <button type="button" class="btn btn-link" id="review">${obj.review !== "" ? "Edit" : "Add"} Review</button>
+                <button type="button" class="btn btn-link" id="review${obj.id}">${obj.review !== "" ? "Edit" : "Add"} Review</button>
             </div>
             <div class="col-4">
-                <button type="button" class="btn btn-link" id="edit" type="button" data-toggle="modal"
+                <button type="button" class="btn btn-link" id="edit${obj.id}" type="button" data-toggle="modal"
                     data-target="#editMovieModal">Edit Movie Details</a>
             </div>
             <div class="col-4">
-                <button type="button" class="btn btn-link" id="delete">Delete</a>
+                <button type="button" class="btn btn-link" id="delete${obj.id}">Delete</a>
             </div>
         </div>
         <div id="reviewDiv" class="w-100 review${obj.id}">${obj.review}</div>

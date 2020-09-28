@@ -252,12 +252,6 @@ function filterTable() {
         let hasGenre = genres.toLowerCase().includes(genre.toLowerCase().trim());
         let hasPartialTitle = t.toLowerCase().includes(title.trim().toLowerCase());
 
-        // if (!hasPartialTitle || !hasGenre || !ratings[rating - 1]) {
-        //
-        // } else {
-        //
-        // }
-
         if (hasPartialTitle && hasGenre && (rating === 0 || ratings[rating - 1])) {
             $(child).show();
         } else {
@@ -267,25 +261,24 @@ function filterTable() {
 }
 
 $("#saveEdit").click(function() {
+
     const properties = ["Plot", "Actors", "Genre", "Director", "Writer", "Rated",
         "Runtime", "Released"];
 
-    let id = $("#edit").attr("movieID");
+    let title =  $("#editTitle").text();
+    let originalObj = movieCache[title];
+    let id = movieCache[title].id;
+    const url = `${baseURL + id}`;
     let $editForm = $("#editForm");
-    let movieObj = {};
-
     let $oldElement = $(`#movie${id}`);
+    $("#editMovieModal").modal('toggle');
 
     for (let property of properties) {
-        movieObj[property] = $editForm.find(`#${property.toLowerCase()}`).val();
+        originalObj[property] = $editForm.find(`#${property.toLowerCase()}`).val();
     }
-    movieObj.id = parseInt(id);
-    movieObj.Title = $("#editTitle").text();
 
-    let $newElement = createMovieCard(movieObj);
-    const url = `${baseURL + id}`;
+    let $newElement = createMovieCard(originalObj);
     $oldElement.replaceWith($newElement);
-    modifyData("PATCH", url, movieObj);
-
-    $("#editMovieModal").modal('toggle');
+    populateData(title, "#movieInfo");
+    modifyData("PATCH", url, originalObj);
 });
