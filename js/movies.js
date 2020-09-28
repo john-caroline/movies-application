@@ -24,7 +24,7 @@ loadHTML();
 function loadHTML() {
     let $load = $("#load");
 
-    $("#movieTable").empty();
+    $("#movieTable").empty().css("visibility", "hidden");
 
     $load.removeClass("d-none");
 
@@ -36,7 +36,10 @@ function loadHTML() {
             }
             generateHTML(data);
         })
-        .then(() => $load.addClass("d-none"));
+        .then(() => {
+            $load.addClass("d-none")
+            $("#movieTable").css("visibility", "visible");
+        });
 }
 
 function generateHTML(data) {

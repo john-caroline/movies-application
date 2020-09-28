@@ -47,6 +47,7 @@ body {
 
 .accordion {
     width: 60%;
+    visibility: hidden;
 }
 
 a {
