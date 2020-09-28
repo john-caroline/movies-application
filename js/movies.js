@@ -47,6 +47,7 @@ function generateHTML(data) {
     }
 }
 
+
 function createMovieCard(obj) {
     let $movieCard = $(document.createElement("div"))
         .addClass("card")

@@ -143,6 +143,8 @@ function fillData(data, div="#dataDiv") {
     }
 }
 
+
+
 $("#addToList").click(function (){
     let title = $("#movieTitle").text();
 
