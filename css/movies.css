@@ -97,23 +97,23 @@ a:hover {
 
 #load {
     /*border-radius: 50%;*/
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    width: 60px;
-    height: 60px;
+    position: fixed;
+    margin: 0;
+    top: 50%;
+    left: calc(50% - 50px);
+    width: 100px;
     /*animation: spin 2s linear infinite;*/
     /*border-right: 16px solid var(--twine);*/
     /*border-bottom: 16px solid var(--red);*/
     /*border: 16px solid var(--steelGrey);*/
     /*border-top: 16px solid white;*/
+    transform-origin: 54px center;
     animation: spin 2s cubic-bezier(.8, 0, .2, 1) infinite;
+
 }
 @keyframes spin {
-    50% { transform: rotate(180deg); }
+
+    50% { transform: rotate(360deg); }
     100% { transform: rotate(360deg); }
 
 }
