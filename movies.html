@@ -16,12 +16,8 @@
 <div class="jumbotron jumbotron-fluid mt-0 mb-0 pb-0 pt-0">
     <div class="container text-center">
         <img src="img/logo.png" class="m-0">
-<!--        <h1 class="display-4 text-center">My Movies</h1>-->
     </div>
 </div>
-<!--<div class="titleHeader header ">-->
-<!--    <h3 class="text-center m-3"></h3>-->
-<!--</div>-->
 <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <form id="sideForm" class="d-flex flex-column text-center">
@@ -63,7 +59,7 @@
                    data-target="#saveModal">
                     <i class="fas fa-plus-square"></i>
                 </a>
-                <div class="text-center" style="color: white">Add custom</div>
+                <label for="addBtn" class="text-center" style="color: white;">Add Custom</label>
             </div>
         </div>
 
@@ -72,7 +68,7 @@
                 <a href="#" type="button" id="quickAdd" data-toggle="modal" data-target="#addMovieModal">
                     <i class="fab fa-searchengin"></i>
                 </a>
-                <div class="text-center" style="color: white">Search</div>
+                <label class="text-center" for="quickAdd" style="color: white">Search</label>
             </div>
         </div>
     </div>
@@ -82,14 +78,17 @@
     <span id="menu" onclick="openNav()" style="color: #C78851">&#9776;</span>
 </div>
 
-<div id="load" class="d-none"></div>
-
-<div class="container">
-    <div class="d-flex justify-content-center">
-        <div id="movieTable" class="accordion"></div>
-    </div>
+<div id="load" class="d-none">
+    <img src="./img/film-reel.png" style="max-height: 250%">
 </div>
 
+<div class="container">
+    <div class="d-flex justify-content-center m-0 p-0"  >
+        <div id="movieTable" class="accordion" style=" height: 45vh; width: 50%; overflow-y: scroll;">
+        </div>
+    </div>
+
+</div>
 <div id="movieInfo" class="col-auto">
 
 </div>
@@ -98,16 +97,16 @@
 <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="saveModalLabel">Create a listing</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+            <div class="modal-header p-0">
+                <h5 class="modal-title w-100 text-center " id="saveModalLabel">Create a Listing</h5>
+<!--                <button type="button" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
                 </button>
             </div>
-            <div class="modal-body">
-                <input id="newMovieTitle" type="text" placeholder="Enter Movie Title">
+            <div class="modal-body text-center ">
+                <input id="newMovieTitle" class="w-75" type="text" placeholder="Enter Movie Title">
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer p-0 m-0">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button id="saveTitle" type="button" class="btn btn-primary">Save changes</button>
             </div>
@@ -119,17 +118,17 @@
 <!-- Modal to add movie -->
 <div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog" aria-labelledby="addMovieModalTitle"
      aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="movieModalLongTitle">Add a movie</h5>
+    <div class="modal-dialog modal-lg " role="document">
+        <div class="modal-content mb-3">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100" id="movieModalLongTitle">Add a Movie</h4>
 <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
 <!--                    <span aria-hidden="true">&times;</span>-->
 <!--                </button>-->
             </div>
             <div class="modal-body">
                 <form id="searchMovie">
-                    <input id="addSearch" placeholder="Enter movie title">
+                    <input id="addSearch" placeholder="Enter movie title" class = "mb-3">
                     <input id="submitSearch" type="submit">
                 </form>
 
@@ -144,7 +143,7 @@
                         </div>
                     </div>
                 </div>
-                <button id="addToList">Add Movie</button>
+
                 <nav class="d-none" aria-label="Page navigation example" id="pages">
                     <ul class="pagination" id="searchPage"></ul>
                 </nav>
@@ -153,6 +152,11 @@
                 <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
                 <!--            </div>-->
             </div>
+<!--            <button id="addToList">Add Movie</button>-->
+            <a href="#" id="addToList" type="button" class="text-right mb-3 mr-3">
+                Add Movie
+                <i class="fas fa-plus-square"></i>
+            </a>
         </div>
     </div>
 </div>
@@ -168,7 +172,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <span id="editTitle"></span>
+            <span id="editTitle" class = "text-center" style="background-color: #272139; color: white; font-size: 2em"></span>
             <div class="modal-body">
                 <form id="editForm">
                     <div class="form-group">

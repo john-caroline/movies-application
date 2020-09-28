@@ -118,7 +118,7 @@ function fillData(data, div="#dataDiv") {
         let $img = $(document.createElement("img"));
         $img.attr("src", data.Poster);
         $img.attr("height", "240px");
-        $posterDiv.addClass("col-6 p-0").append($img);
+        $posterDiv.addClass("col-6 text-center").append($img);
         $topHalf.append($posterDiv);
     }
 
@@ -142,6 +142,8 @@ function fillData(data, div="#dataDiv") {
         }
     }
 }
+
+
 
 $("#addToList").click(function (){
     let title = $("#movieTitle").text();
