@@ -80,6 +80,7 @@ a:hover {
 
 #movieInfo {
     background-color: var(--steelGrey);
+    max-height: 576px;
     margin: 5px;
     color: #f1f1f1;
 }
