@@ -267,8 +267,9 @@ a:hover {
 }
 
 .modal-header {
-    /*background-color: var(--bombay);*/
-    color: var(--rum);
+    background: rgb(50,48,94);
+    background: linear-gradient(90deg, rgba(50,48,94,1) 0%, rgba(157,150,163,0.9822303921568627) 48%, rgba(50,48,94,1) 100%);
+    color: black;
     font-size: larger;
     font-weight: bold;
 }
